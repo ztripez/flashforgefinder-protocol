@@ -1,29 +1,12 @@
 const net = require('net');
-const FF = require('./FlashForgeFinder');
+const FlashForgeFinder = require('./FlashForgeFinder');
+const Forge = new FlashForgeFinder("10.0.0.193",8899);
 
-const client = new net.Socket();
-
-const clientIp = "10.0.0.193";
-const clientPort = "8899";
-
-
-
-client.connect(clientPort, clientIp, () => {
-	console.log('Connected');
-  client.write("~M601 S1\n");
+Forge.on("login",() => {
 });
 
-let one = 0;
-
-client.on('data', (data) => {
-  console.log(FF.packetParser(data));
-
+Forge.on("data",(data) => {
+	//console.log(data);
 });
 
-client.on('close', () => {
-	console.log('Connection closed');
-});
-client.on('error', () => {
-	console.log('Connection error');
-  client.destroy();
-});
+Forge.connect();

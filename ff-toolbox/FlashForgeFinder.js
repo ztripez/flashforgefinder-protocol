@@ -1,7 +1,7 @@
 
 const net = require('net');
 const EventEmitter = require('events');
-
+const parser = require('./parser');
 class FlashForgeFinder extends EventEmitter{
 
   constructor(clientIp,clientPort,sendTime=10){
@@ -33,9 +33,10 @@ class FlashForgeFinder extends EventEmitter{
 
   onData(data) {
 
-    const pkg = packetParser(data);
-    console.log(pkg);
-    switch (pkg.code) {
+    //const pkg = packetParser(data);
+    const pkg = parser(data);
+    //console.log(pkg);
+    switch (pkg.cmd) {
       case "M601":
         if(pkg.ok) {
           this.emit('login');
@@ -43,6 +44,7 @@ class FlashForgeFinder extends EventEmitter{
         break;
       default:
     }
+    this.emit("data",pkg);
   }
   onError(err) {
     this.emit("error",err);
@@ -82,37 +84,4 @@ class FlashForgeFinder extends EventEmitter{
 
 }
 
-
-function messageExtractor(lines){
-  return lines.reduce((acc,elm) => {
-    if(elm.indexOf("CMD ")!== -1 || (elm === "ok") || (elm === "") ) return acc;
-    if(elm === "ok\n") elm = "ok";
-    return acc+elm +"\n";
-  },"").replace("\n","");
-
-}
-
-
-function packetParser(data) {
-
-  const dataStr = data.toString();
-  /* test packet
-  CMD M602 Received.
-Control Release.
-ok
-*/
-  const lines = dataStr.split("\r\n");
-  console.log(lines);
-  const cmds = lines[0].split(" ");
-  message = messageExtractor(lines);
-  return {
-    code: cmds[1],
-    message,
-    ok: lines[lines.length-2].replace("\n","") == "ok" || message == "ok"
-  }
-}
-
-
-
-module.exports.FlashForgeFinder = FlashForgeFinder;
-module.exports.packetParser = packetParser;
+module.exports = FlashForgeFinder;
