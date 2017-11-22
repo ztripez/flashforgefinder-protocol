@@ -1,0 +1,9 @@
+{
+  "name": "ff-toolbox",
+  "version": "1.0.0",
+  "description": "Small tool to test flashforge protocol",
+  "main": "index.js",
+  "repository": "https://github.com/ztripez/flashforgefinder-proxy.git",
+  "author": "Ztripez von Matérn",
+  "license": "MIT"
+}
