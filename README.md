@@ -59,7 +59,9 @@ ok
 ```
 
 ## Command List
-| Code | Response                                                                                                                | Verified | Comment                                          |
+| Code | Response | Verified | Comment                                          |
 |-|-|-|-|
-| ~M601 S1 ||
+| ~M601 S1 |CMD M601 Received.<br>Control Success.<br>ok<br>|true| Login Command|
+| ~M602 |CMD M601 Received.<br>Control Release.<br>ok|true| Logout Command|
 | ~M27  | CMD M119 Received. Endstop: X-max: 1 Y-max: 0 Z-max: 1<br>Status: S:1 L:0 J:0 F:1<br>MachineStatus: READY<br>MoveMode:  READY<br>ok | false    | Get repeated often, guessing it's used as a PING |
+| ~M146 r255 g255 b255 F0 ||true| Sets the color of the leds|
