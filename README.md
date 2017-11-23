@@ -1,4 +1,4 @@
-# flashforgefinder-proxy
+# flashforgefinder-protocol
 A  reverse engineering of Flash Forge Finder WIFI protocol
 
 
