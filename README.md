@@ -1,9 +1,7 @@
 # flashforgefinder-protocol
 A  reverse engineering of Flash Forge Finder WIFI protocol
 
-
 Capture is done with Wireshark over Ethernet, if this is successful I'll maybe take a look into the USB protocol also.
-
 The pca-captures are located in the wireshark folder, label the scenario made. Also all pca-cap has a tcp-folow in markdown.
 
 
@@ -11,30 +9,13 @@ The pca-captures are located in the wireshark folder, label the scenario made. A
 
 ## Findings so far:
 
-~~If I'm connecting to the printer with a tcp socket (see ff-toolbox) I get a connection, but it doesn't send any data or responds to any command.
-I'm guessing the command is not sent as a string.~~
+This was much easier than expected. The printer talks G-code directly over tcp socket. As soon as the M-code M601 is sent you can talk both G and M code directly to the printer. 
 
-
-The protocol is quite simple, with the client sending a code with parameters ending with a CR to the printer that responds with the result.
-The client connects and send ~M601 S1 to get control, server responds with
-```
-Received: CMD M601 Received.
-Control Success.
-ok
-```
-
-if the client doesn't send any more commands over a certain amount of time (haven't clocked it yet) the printer sends:
-```
-Received: Control Release.
-```
-
-I'm guessing the command M27 is used as a ping to keep the control alive.
+Now I only need to figure out what M-codes are supported.
 
 
 If I keep the connection open and connect with the FlashPrint software at the same time, the ff-toolbox receives data from the printer.
 (side note: this is a bit interesting, you are unable to be connected to the printer with 2 instances of flashprint, but I'm able to be with a simple tcp socket)
-
-All that is left is to map all the codes.
 
 ### Example:
 Client:<br>
@@ -63,5 +44,5 @@ ok
 |-|-|-|-|
 | ~M601 S1 |CMD M601 Received.<br>Control Success.<br>ok<br>|true| Login Command|
 | ~M602 |CMD M601 Received.<br>Control Release.<br>ok|true| Logout Command|
-| ~M27  | CMD M119 Received. Endstop: X-max: 1 Y-max: 0 Z-max: 1<br>Status: S:1 L:0 J:0 F:1<br>MachineStatus: READY<br>MoveMode:  READY<br>ok | false    | Get repeated often, guessing it's used as a PING |
+| ~M27  | CMD M119 Received. Endstop: X-max: 1 Y-max: 0 Z-max: 1<br>Status: S:1 L:0 J:0 F:1<br>MachineStatus: READY<br>MoveMode:  READY<br>ok | false    |  |
 | ~M146 r255 g255 b255 F0 ||true| Sets the color of the leds|
