@@ -43,5 +43,5 @@ ok
 | Code | Response | Verified | Comment                                          |
 |-|-|-|-|
 | ~M601 S1 |CMD M601 Received.<br>Control Success.<br>ok<br>|true| Login Command|
-| ~M602 |CMD M601 Received.<br>Control Release.<br>ok|true| Logout Command|
+| ~M602 |CMD M602 Received.<br>Control Release.<br>ok|true| Logout Command|
 | ~M146 r255 g255 b255 F0 ||true| Sets the color of the leds|
